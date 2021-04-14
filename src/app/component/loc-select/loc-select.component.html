@@ -1,0 +1,93 @@
+<div class="container text-center" style="display: flex;justify-content: center;">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Please Select location in sid the blue circle</mat-card-title>
+        </mat-card-header>
+        <div style="width: 800px;">
+            <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" (mapReady)="mapReadyHandler($event)">
+                <agm-marker (markerClick)="clickedMarker('', 0)" [latitude]="lat" [longitude]="lng" [label]="''" [markerDraggable]="false">
+
+                    <agm-info-window>
+                        <strong>InfoWindow content</strong>
+                    </agm-info-window>
+
+                </agm-marker>
+                <agm-marker *ngFor="let m of markers; let i = index" (markerClick)="clickedMarker(m.label+'', i)" [latitude]="m.lat" [longitude]="m.lng" [label]="m.label+''" [markerDraggable]="m.draggable" (dragEnd)="markerDragEnd(m, $event)">
+
+                    <agm-info-window>
+                        <strong>InfoWindow content</strong>
+                    </agm-info-window>
+
+                </agm-marker>
+                <agm-circle [latitude]="my_lat" [longitude]="my_lng" [radius]="10000" [fillColor]="'red'" [circleDraggable]="false" [editable]="false" (circleClick)="mapClicked($event)" [clickable]="true">
+                </agm-circle>
+
+                <agm-circle [latitude]="my_lat" [longitude]="my_lng" [radius]="40000" [fillColor]="'blue'" [circleDraggable]="true" [editable]="false" [clickable]="false">
+                </agm-circle>
+            </agm-map>
+        </div>
+    </mat-card>
+</div>
+
+
+<!-- <div id="map"></div> -->
+<!-- <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="false" (mapReady)="mapClicked($event)">
+    <agm-data-layer>
+        <agm-marker *ngFor="let m of markers; let i = index" (markerClick)="clickedMarker(m.label+'', i)" [latitude]="m.lat" [longitude]="m.lng" [label]="m.label+''" [markerDraggable]="m.draggable" (dragEnd)="markerDragEnd(m, $event)">
+
+            <agm-info-window>
+                <strong>InfoWindow content</strong>
+            </agm-info-window>
+
+        </agm-marker>
+
+        <agm-circle [latitude]="lat + 0.3" [longitude]="lng" [radius]="5000" [fillColor]="'red'" [circleDraggable]="true" [editable]="true">
+        </agm-circle>
+    </agm-data-layer>
+</agm-map> -->
+<!-- <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" (mapReady)="mapReadyHandler($event)">
+    <agm-marker (markerClick)="clickedMarker('', 0)" [latitude]="lat" [longitude]="lng" [label]="''" [markerDraggable]="false">
+
+        <agm-info-window>
+            <strong>InfoWindow content</strong>
+        </agm-info-window>
+
+    </agm-marker>
+    <agm-marker *ngFor="let m of markers; let i = index" (markerClick)="clickedMarker(m.label+'', i)" [latitude]="m.lat" [longitude]="m.lng" [label]="m.label+''" [markerDraggable]="m.draggable" (dragEnd)="markerDragEnd(m, $event)">
+
+        <agm-info-window>
+            <strong>InfoWindow content</strong>
+        </agm-info-window>
+
+    </agm-marker>
+    <agm-circle [latitude]="lat" [longitude]="lng" [radius]="10000" [fillColor]="'red'" [circleDraggable]="false" [editable]="false" (circleClick)="mapClicked($event)" [clickable]="true">
+    </agm-circle>
+
+    <agm-circle [latitude]="lat" [longitude]="lng" [radius]="40000" [fillColor]="'blue'" [circleDraggable]="true" [editable]="true" [clickable]="false">
+    </agm-circle>
+</agm-map> -->
+<button mat-raised-button (click)="crnlocation()">mu</button>
+<button mat-raised-button (click)="getDistanceMatrix(sendQuery)">dis</button>
+
+<!-- <div class="container">
+
+    <h1>Angular Google Map with Search Box Example - ItSolutionStuff.com</h1>
+
+    <div class="form-group">
+        <label>Enter address</label>
+        <input type="text" class="form-control" (keydown.enter)="$event.preventDefault()" placeholder="Search Nearest Location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search>
+    </div>
+
+    <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+        <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"></agm-marker>
+    </agm-map>
+
+    <h5>Address: {{address}}</h5>
+    <div>Latitude: {{latitude}}</div>
+    <div>Longitude: {{longitude}}</div>
+
+</div> -->
+<!-- <agm-map [latitude]="lat" [longitude]="lng" (mapClick)="onChooseLocation($event)">
+    <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+</agm-map> -->
+<app-loc-view [locations]="locations"></app-loc-view>

@@ -1,0 +1,93 @@
+<div class="wow fadeInUp mt-3" data-wow-iteration="1" data-wow-duration="2s">
+    <div class="mt-2 p-0 tbl-content mat-elevation-z1" style="font-family: 'Courier New', Courier, monospace;">
+        <p class="float-left m-4" style="font-size: large;">Location Data</p>
+        <mat-form-field class="example-form-field">
+            <mat-label>Filter</mat-label>
+            <input matInput type="text" [(ngModel)]="value" (keyup)="applyFilter($event)" placeholder="Subject" #input>
+            <button mat-button *ngIf="value" matSuffix mat-raised-button aria-label="Clear" (click)="value=''">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <div class="tbl">
+            <table mat-table [dataSource]="dataSource" matSort #TableSort="matSort">
+                <!-- No Column -->
+                <ng-container matColumnDef="loc_no">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Loc No. </th>
+                    <td mat-cell *matCellDef="let row"> {{row.loc_no}} </td>
+                    <!-- <td mat-footer-cell *matFooterCellDef colspan="3"> Total Locations</td> -->
+                </ng-container>
+
+                <!-- loc Column -->
+                <ng-container matColumnDef="loc">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
+                    <td mat-cell *matCellDef="let row">
+                        <div style="cursor: pointer; display: inline-flex" matTooltip="More info" (click)="more(row)" *ngIf="row.loc">
+                            {{row.loc.lat}} ,<br> {{row.loc.lng}}
+                        </div>
+                        <span class="material-icons ml-1">
+                            more
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!--Distance Id Column -->
+                <ng-container matColumnDef="distance">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Distance </th>
+                    <td mat-cell *matCellDef="let row"> {{row.distance}} </td>
+                </ng-container>
+
+                <!-- Traffic Column -->
+                <ng-container matColumnDef="traffic">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Traffic </th>
+                    <td mat-cell *matCellDef="let row"> {{row.traffic}} </td>
+                    <!-- <td mat-footer-cell *matFooterCellDef> {{getTotalCost()}} </td> -->
+                </ng-container>
+
+                <!-- Status Column -->
+                <!-- <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                    <td mat-cell *matCellDef="let row">
+                        <div class="badge badge-success pl-1 pr-1" *ngIf="row.isConfirm" style="width: fit-content;">
+                            Confirmed
+                        </div>
+                        <div class="badge badge-warning pl-1 pr-1" *ngIf="!row.isConfirm" style="width: fit-content;">
+                            Rejected
+                        </div>
+                        <mat-icon color="accent" *ngIf="row.isConfirm">offline_pin</mat-icon>
+                        <mat-icon color="warn" *ngIf="!row.isConfirm">error</mat-icon>
+                    </td>
+                </ng-container> -->
+                <!-- Action Column -->
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+                    <td mat-cell *matCellDef="let row">
+                        <mat-button-toggle-group style="border: none;display: inline-flex;flex-direction: column;">
+                            <button mat-raised-button (click)="delet(row)" matTooltip="Delete" class="mb-1 mt-1 btn-3">
+                                <mat-icon color="warn">cancel</mat-icon>
+                            </button>
+                        </mat-button-toggle-group>
+                    </td>
+                </ng-container>
+                <!-- Star Column -->
+                <ng-container matColumnDef="star" stickyEnd>
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-icon>more_vert</mat-icon>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <!-- <tr mat-footer-row *matFooterRowDef="['loc_no', 'loc_no']; sticky: true" class="example-first-footer-row"></tr> -->
+
+                <!-- Row shown when there is no matching data that will be provided to the wrapper table. -->
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="5">No data available "{{input.value}}"</td>
+                </tr>
+
+            </table>
+        </div>
+        <mat-paginator #TablePaginator="matPaginator" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons>
+        </mat-paginator>
+    </div>
+</div>

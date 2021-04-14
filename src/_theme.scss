@@ -1,0 +1,67 @@
+
+// 
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+
+@include mat-core();
+
+$candy-app-primary: mat-palette($mat-blue, 800);
+$candy-app-accent:  mat-palette($mat-green, 800);
+
+// The warn palette is optional (defaults to red).
+$candy-app-warn:    mat-palette($mat-red);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as `color` or `typography`.
+$candy-app-theme: mat-light-theme((
+  color: (
+    primary: $candy-app-primary,
+    accent: $candy-app-accent,
+    warn: $candy-app-warn,  
+  )
+));
+
+@mixin custom-components-theme($theme) {
+}
+ 
+// Define an alternate dark theme.
+$dark-primary: mat-palette($mat-teal);
+$dark-accent:  mat-palette($mat-amber, A200, A100, A400);
+$dark-warn:    mat-palette($mat-deep-orange);
+$dark-theme:   mat-dark-theme((
+  color: (
+    primary: $dark-primary,
+    accent: $dark-accent,
+    warn: $dark-warn,
+  )
+));
+
+// Include the dark color styles inside of a block with a CSS class. You can make this
+// CSS class whatever you want. In this example, any component inside of an element with
+// `.unicorn-dark-theme` will be affected by this alternate dark theme instead of the default theme.
+@include angular-material-theme($candy-app-theme);
+@include custom-components-theme($candy-app-theme); 
+.unicorn-dark-theme {
+  @include angular-material-color($dark-theme);
+}
+@import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500&display=swap");
+// ? 3. Define a custom heading typography config
+$heading-font-family: "'Work Sans', sans-serif", 'monospace';
+
+$custom-typography: mat-typography-config(
+  $font-family: $heading-font-family,
+  $display-4: mat-typography-level(112px, $font-family: $heading-font-family),
+  $display-3: mat-typography-level(56px, $font-family: $heading-font-family),
+  $display-2: mat-typography-level(45px, $font-family: $heading-font-family),
+  $display-1: mat-typography-level(34px, $font-family: $heading-font-family),
+  $headline: mat-typography-level(24px, $font-family: $heading-font-family),
+  $title: mat-typography-level(20px, $font-family: $heading-font-family),
+  $body-1: mat-typography-level(16px, 24px, 500)
+);
+// $headline: mat-typography-level(32px, 48px, 700),
+
+@include angular-material-typography($custom-typography);

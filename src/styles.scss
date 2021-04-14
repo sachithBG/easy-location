@@ -1,4 +1,73 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+@import "./theme";
+// @import "../node_modules/animate.css/animate.css";
+$config: mat-typography-config();
+button:focus {
+    outline: unset !important;
+    outline: 0px auto -webkit-focus-ring-color !important;
+}
+
+::after,
+::before {
+    box-sizing: unset !important;
+}
+
+button:focus::before {
+    outline: unset !important;
+    outline: 1px auto -webkit-focus-ring-color !important;
+}
+
+button:focus::after {
+    outline: unset !important;
+    outline: 1px auto -webkit-focus-ring-color !important;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 30px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translate3d(-40px, 0, 0);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translate3d(40px, 0, 0);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
