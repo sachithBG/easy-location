@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Destn } from '../model/user';
 import { LocService } from '../service/loc.service';
 
 @Injectable({
@@ -10,17 +11,37 @@ export class LocImpService {
   constructor(private locService: LocService) { }
 
 
-  addLocByaddr(loc: any[]) {
+  addLocByaddr(org_id: number, loc: Destn) {
     return new Observable<any>((obs) => {
       this.locService
-        .addLocByaddr(
-          Number(1),//this.toknStorageService.getUserid()
+        .addLocById(
+          org_id,
           loc
         )
         .subscribe(
           (data) => {
             obs.next(data);
-            alert('Saved Successfully!');
+            // alert('Successfully Saved!');
+          },
+          (error) => {
+            console.log(error);
+            obs.next(0);
+          }
+        );
+    });
+  }
+
+  updatesubLoc(loc_id: number, loc: Destn) {
+    return new Observable<any>((obs) => {
+      this.locService
+        .updatesubLoc(
+          loc_id,
+          loc
+        )
+        .subscribe(
+          (data) => {
+            obs.next(data);
+            // alert('Successfully Saved!');
           },
           (error) => {
             console.log(error);
@@ -34,8 +55,8 @@ export class LocImpService {
     return new Observable<any>((obs) => {
       this.locService.deleteLoc(id).subscribe(
         (data) => {
-          obs.next(data);
-          alert('Deleted Successfully!');
+          obs.next(1);
+          //alert('Successfully deleted!!');
         },
         (error) => {
           console.log(error);
@@ -45,10 +66,10 @@ export class LocImpService {
     });
   }
 
-  getAllLocsByaddr(mail: string) {
+  getAllSubLocsById(id: number) {
     return new Observable<any>((obs) => {
       this.locService
-        .getAllLocsByaddr(mail)
+        .getAllSubLocsById(id)
         .subscribe(
           (data) => {
             obs.next(data);
@@ -61,7 +82,6 @@ export class LocImpService {
         );
     });
   }
-
   // 
   getDistanceMatrix(sendQuery: any) {
     return new Observable<any>((obs) => {

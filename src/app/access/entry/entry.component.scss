@@ -1,0 +1,31 @@
+:host {
+    display: block;
+    padding: 0 16px;
+}
+
+.signInForm {
+    width: 400px;
+    padding: 12px 24px 24px;
+    igx-input-group+igx-input-group {
+        margin-top: 24px;
+    }
+}
+
+button:focus {
+    outline: unset;
+    outline: 0px auto -webkit-focus-ring-color;
+}
+
+ ::after,
+ ::before {
+    box-sizing: unset;
+}
+
+.mat-tab-body {
+    /* Removing the scrollbar from the Tabs card */
+    overflow-y: hidden !important;
+}
+
+.unicorn-dark-theme .mat-tab-label {
+    color: rgb(9, 5, 61) !important;
+}

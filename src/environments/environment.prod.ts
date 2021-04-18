@@ -1,4 +1,4 @@
 export const environment = {
-  production: false,
-  baseUrl: 'http://localhost:3000'
+  production: true,
+  baseUrl: 'http://emaps-env.eba-wdc74hd9.us-east-2.elasticbeanstalk.com'
 };

@@ -1,73 +1,78 @@
-<div class="container text-center" style="display: flex;justify-content: center;">
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>Please Select location in sid the blue circle</mat-card-title>
-        </mat-card-header>
-        <div style="width: 800px;">
-            <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" (mapReady)="mapReadyHandler($event)">
-                <agm-marker (markerClick)="clickedMarker('', 0)" [latitude]="lat" [longitude]="lng" [label]="''" [markerDraggable]="false">
+<mat-card class="container mb-3">
+    <mat-card class="col" style="align-items: center;">
+        <mat-card-header style="justify-content: center;">
+            <mat-card-title>Please select locations in the blue circle</mat-card-title>
+            <span style="flex: 1 1 auto;"></span>
+            <button mat-icon-button (click)="refresh()"><mat-icon>refresh</mat-icon></button> </mat-card-header>
+        <div>
+            <div class="row justify-content-center">
+                <div class="pac-card text-left p-2" id="pac-card" style="font-size: medium;">
+                    <div style="font-size: 12px;">
+                        <div id="title">Search Location</div>
+                        <div id="type-selector" class="pac-controls" style="display: none;">
+                            <input type="radio" name="type" id="changetype-all" checked="checked" />
+                            <label for="changetype-all">All</label>
 
+                            <input type="radio" name="type" id="changetype-establishment" />
+                            <label for="changetype-establishment">Establishments</label>
+
+                            <input type="radio" name="type" id="changetype-address" />
+                            <label for="changetype-address">Addresses</label>
+
+                            <input type="radio" name="type" id="changetype-geocode" />
+                            <label for="changetype-geocode">Geocodes</label>
+                        </div>
+                        <br />
+                        <div id="strict-bounds-selector" class="pac-controls" style="display: none;">
+                            <input type="checkbox" id="use-location-bias" value="" checked />
+                            <label for="use-location-bias">Bias to map viewport</label>
+
+                            <input type="checkbox" id="use-strict-bounds" value="" />
+                            <label for="use-strict-bounds">Strict bounds</label>
+                        </div>
+                    </div>
+                    <div id="pac-container">
+                        <input id="pac-input" type="text" placeholder="Enter a location" />
+                    </div>
+                </div>
+            </div>
+            <agm-map [latitude]="my_lat" [longitude]="my_lng" [zoom]="zoom" (mapReady)="mapReadyHandler($event)">
+                <!-- home -->
+                <agm-marker (markerClick)="clickedMarker('', 0)" [latitude]="my_lat" [longitude]="my_lng" [label]="'H'" [markerDraggable]="false">
                     <agm-info-window>
-                        <strong>InfoWindow content</strong>
+                        <strong>lat : {{my_lat}} <br> lng : {{my_lng}}</strong><br>
+                        <strong>address : {{my_adr}}</strong>
                     </agm-info-window>
-
                 </agm-marker>
-                <agm-marker *ngFor="let m of markers; let i = index" (markerClick)="clickedMarker(m.label+'', i)" [latitude]="m.lat" [longitude]="m.lng" [label]="m.label+''" [markerDraggable]="m.draggable" (dragEnd)="markerDragEnd(m, $event)">
-
+                <!-- new -->
+                <agm-marker *ngFor="let m of locations; let i = index" (markerClick)="clickedMarker(m.label+'', i)" [latitude]="m.loc.lat" [longitude]="m.loc.lng" [label]="m.label+''" [markerDraggable]="true" (dragEnd)="markerDragEnd(m, $event)">
                     <agm-info-window>
-                        <strong>InfoWindow content</strong>
+                        <strong>lat : {{m.loc.lat}} ,&nbsp; lng : {{m.loc.lng}}</strong><br>
+                        <strong>address : {{m.address}} <br> distance : {{m.distance/1000}} Km</strong><br>
+                        <strong>traffic : {{m.traffic | timezn}} </strong>
                     </agm-info-window>
-
                 </agm-marker>
-                <agm-circle [latitude]="my_lat" [longitude]="my_lng" [radius]="10000" [fillColor]="'red'" [circleDraggable]="false" [editable]="false" (circleClick)="mapClicked($event)" [clickable]="true">
+                <!-- <agm-circle [latitude]="my_lat" [longitude]="my_lng" [radius]="40000" [fillColor]="'blue'" [circleDraggable]="false" [editable]="false" [clickable]="false">
                 </agm-circle>
-
-                <agm-circle [latitude]="my_lat" [longitude]="my_lng" [radius]="40000" [fillColor]="'blue'" [circleDraggable]="true" [editable]="false" [clickable]="false">
-                </agm-circle>
+                <agm-circle [latitude]="my_lat" [longitude]="my_lng" [radius]="10000" [fillColor]="'red'" [circleDraggable]="false" [editable]="false" [clickable]="true">
+                </agm-circle> -->
             </agm-map>
         </div>
+        <mat-progress-spinner [diameter]="30" class="example-margin mr-2 mt-2 float-right" color="primary" mode="indeterminate" *ngIf="isLoader">
+        </mat-progress-spinner>
+        <div class="container text-center mt-2" *ngIf="err">
+            <div class="alert alert-danger" role="alert">
+                A maximum number of locations exceeds !
+            </div>
+        </div>
+        <div class="container text-center mt-2" *ngIf="err_outofrng">
+            <div class="alert alert-danger" role="alert">
+                Out of range !
+            </div>
+        </div>
     </mat-card>
-</div>
-
-
-<!-- <div id="map"></div> -->
-<!-- <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="false" (mapReady)="mapClicked($event)">
-    <agm-data-layer>
-        <agm-marker *ngFor="let m of markers; let i = index" (markerClick)="clickedMarker(m.label+'', i)" [latitude]="m.lat" [longitude]="m.lng" [label]="m.label+''" [markerDraggable]="m.draggable" (dragEnd)="markerDragEnd(m, $event)">
-
-            <agm-info-window>
-                <strong>InfoWindow content</strong>
-            </agm-info-window>
-
-        </agm-marker>
-
-        <agm-circle [latitude]="lat + 0.3" [longitude]="lng" [radius]="5000" [fillColor]="'red'" [circleDraggable]="true" [editable]="true">
-        </agm-circle>
-    </agm-data-layer>
-</agm-map> -->
-<!-- <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" (mapReady)="mapReadyHandler($event)">
-    <agm-marker (markerClick)="clickedMarker('', 0)" [latitude]="lat" [longitude]="lng" [label]="''" [markerDraggable]="false">
-
-        <agm-info-window>
-            <strong>InfoWindow content</strong>
-        </agm-info-window>
-
-    </agm-marker>
-    <agm-marker *ngFor="let m of markers; let i = index" (markerClick)="clickedMarker(m.label+'', i)" [latitude]="m.lat" [longitude]="m.lng" [label]="m.label+''" [markerDraggable]="m.draggable" (dragEnd)="markerDragEnd(m, $event)">
-
-        <agm-info-window>
-            <strong>InfoWindow content</strong>
-        </agm-info-window>
-
-    </agm-marker>
-    <agm-circle [latitude]="lat" [longitude]="lng" [radius]="10000" [fillColor]="'red'" [circleDraggable]="false" [editable]="false" (circleClick)="mapClicked($event)" [clickable]="true">
-    </agm-circle>
-
-    <agm-circle [latitude]="lat" [longitude]="lng" [radius]="40000" [fillColor]="'blue'" [circleDraggable]="true" [editable]="true" [clickable]="false">
-    </agm-circle>
-</agm-map> -->
-<button mat-raised-button (click)="crnlocation()">mu</button>
-<button mat-raised-button (click)="getDistanceMatrix(sendQuery)">dis</button>
+    <app-loc-view class="col" [locations]="locations" (newItemEvent)="rmvItem($event)"></app-loc-view>
+</mat-card>
 
 <!-- <div class="container">
 
@@ -87,7 +92,3 @@
     <div>Longitude: {{longitude}}</div>
 
 </div> -->
-<!-- <agm-map [latitude]="lat" [longitude]="lng" (mapClick)="onChooseLocation($event)">
-    <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
-</agm-map> -->
-<app-loc-view [locations]="locations"></app-loc-view>

@@ -1,2 +1,17 @@
-<p>home works!</p>
-<app-loc-select></app-loc-select>
+<div class="m-0 row text-center justify-content-center mt-3" *ngIf="!isLogin">
+    <mat-card>
+        <app-entry></app-entry>
+    </mat-card>
+</div>
+
+<div class="container" *ngIf="isLogin && !isLoadadrrs">
+    <mat-card class="m-2" *ngIf="usr;" (click)="start(usr.id)" style="cursor: pointer;">
+        <p>Email: {{usr.email}}</p>
+        <p>Adress : {{adr}}
+        </p>
+        <p>Lat : {{usr.origin.lat}}</p>
+        <p>Lng : {{usr.origin.lng}}</p>
+    </mat-card>
+</div>
+
+<app-loc-select *ngIf="isLogin && isLoadadrrs" [id]="id" [my_lat]="usr.origin.lat" [my_lng]="usr.origin.lng" [my_adr]="adr"></app-loc-select>

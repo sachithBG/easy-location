@@ -1,24 +1,29 @@
-import { Component, DoCheck, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, DoCheck, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Subscription } from 'rxjs';
+import { SharedService } from 'src/app/service/shared.service';
 import { LocImpService } from 'src/app/serviceImpl/loc-imp.service';
+import { MsgBoxComponent } from '../msg-box/msg-box.component';
 
 @Component({
   selector: 'app-loc-view',
   templateUrl: './loc-view.component.html',
   styleUrls: ['./loc-view.component.scss']
 })
-export class LocViewComponent implements OnInit, OnChanges, DoCheck {
+export class LocViewComponent implements OnInit, OnChanges, DoCheck, OnDestroy {
   @Input() public locations: locData_[] = [];
+  @Output() newItemEvent = new EventEmitter<string>();
+
   displayedColumns: string[] = [
-    'loc_no',
+    'label',
     'loc',
     'distance',
     'traffic',
-    'star',
-    'action'
+    'action',
+    'star'
   ];
 
   dataSource: MatTableDataSource<locData_>;
@@ -26,38 +31,52 @@ export class LocViewComponent implements OnInit, OnChanges, DoCheck {
   paginator!: MatPaginator;
   @ViewChild('TableSort', { static: true }) sort: MatSort = new MatSort;
   value = '';
-  enrollmentDt: locData = {L: []};
+  enrollmentDt: locData = { L: [] };
   inst = new Map();
+
+  genarate_locs: Subscription = new Subscription;
+
   constructor(
     private locService: LocImpService,
-    // private subcatImpService: SubcategoryImplService,
-    // private defShaerdService: DefaultSharedService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private shrdService: SharedService,
+    private cd: ChangeDetectorRef
   ) {
     this.dataSource = new MatTableDataSource();
   }
+  ngOnDestroy(): void {
+    if (this.genarate_locs) {
+      this.genarate_locs.unsubscribe();
+    }
+  }
   ngDoCheck(): void {
-    console.log('changes');
-    this.enrollmentDt = this.dataSourcemodl(this.locations);
-    this.dataSource = new MatTableDataSource(this.enrollmentDt.L);
+    // console.log('changes');
   }
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes);
-    
   }
 
   ngOnInit(): void {
-    // this.locService.getAllLocsByaddr('').subscribe(
-    //   async (data: locData[]) => {
-    //     console.log(data);
+
+    this.enrollmentDt = this.dataSourcemodl(this.locations);
+    this.dataSource = new MatTableDataSource(this.enrollmentDt.L);
+    this.ngAfterViewInit();
+
+    this.genarate_locs = this.shrdService.genarate_locs_$.subscribe(
+      (data: any) => {
+        this.locations = data.items;
         this.enrollmentDt = this.dataSourcemodl(this.locations);
         this.dataSource = new MatTableDataSource(this.enrollmentDt.L);
-        // this.ngAfterViewInit();
-      // });
+        this.ngAfterViewInit();
+      }
+    );
+
   }
+
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.cd.detectChanges();
   }
 
   dataSourcemodl(data: any): locData {
@@ -66,7 +85,7 @@ export class LocViewComponent implements OnInit, OnChanges, DoCheck {
       this.inst.set(c.id, c);
       modls.push({
         id: c.id,
-        loc_no: c.loc_no,
+        label: c.label,
         loc: c.loc,
         distance: c.distance,
         traffic: c.traffic,
@@ -83,69 +102,43 @@ export class LocViewComponent implements OnInit, OnChanges, DoCheck {
       this.dataSource.paginator.firstPage();
     }
   }
-  // getTotalCost() {
-  //   let fee: locData_[] = [];
-  //   for (const i of this.inst.values()) {
-  //     fee.push(i);
-  //   }
-  //   if (this.inst.size > 0) {
-  //     return fee
-  //       .map((t) => t.loc_no)
-  //       .reduce((acc, value) => acc + value, 0);
-  //   }
-  //   else{return 0;}
-  // }
+
   more(row: any) {
-    console.log(this.inst.get(row.id));
-    // this.defShaerdService.alert(this.inst.get(row.id), 'pminst');
+    // const dialogRefloc =  this.dialog.open(MsgBoxComponent, {
+    //     disableClose: false,
+    //     data: row
+    // });
+    // setTimeout(()=>{
+    //   dialogRefloc.close();
+    // }, 9000)
   }
-
-  // enr(row: any, isConfirm: boolean, reson: string) {
-  //   // this.locService.isConfirm(row.id, isConfirm, reson).subscribe((data) => {
-  //   //   console.log(data);
-  //   //   data ? row.isConfirm = data.isConfirm : '';
-  //   //   // this.enrollmentDt.S.splice(this.enrollmentDt.S.indexOf(row), 1);
-  //   //   this.dataSource = new MatTableDataSource(this.enrollmentDt.S);
-  //   //   this.dataSource.paginator = this.paginator;
-  //   //   this.dataSource.sort = this.sort;
-  //   // });
-  // }
-
-  // confirm(row: any) {
-  //   this.enr(row, false, '');
-  // }
-
-  // reject(row: any) {
-  //   // this.defShaerdService
-  //   // .isBlock('Will be prevented for this subject !', 'block')
-  //   // .afterClosed()
-  //   // .subscribe((result) => {
-  //   //   if (result.res) {
-  //   //     this.enr(row, true, result.reson);
-  //   //   }
-  //   // });
-  // }
 
   delet(row: any) {
-          this.locService.deleteLoc(row.id).subscribe((data: locData[]) => {
-            console.log(data);
-            if (data) {
-              this.enrollmentDt.L.splice(this.enrollmentDt.L.indexOf(row), 1);
-              this.dataSource = new MatTableDataSource(this.enrollmentDt.L);
-              this.dataSource.paginator = this.paginator;
-              this.dataSource.sort = this.sort;
-            }
-          });
+    this.locService.deleteLoc(row.id).subscribe((data) => {
+    //console.log(data);
+      if (data) {
+        this.enrollmentDt.L.splice(this.enrollmentDt.L.indexOf(row), 1);
+        this.dataSource = new MatTableDataSource(this.enrollmentDt.L);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.newItemEvent.emit(row);
+      }
+      this.cd.detectChanges();
+    });
   }
 }
+
+
 export interface locData {
   L: locData_[];
 }
-export interface locData_{
+export interface locData_ {
   id: number;
-  loc_no: number;
-  loc: {lat: number, lng: number};
+  label: number;
+  loc: { lat: number, lng: number };
+  address: string;
+  from: any;
   distance: number;
-  traffic: string;
+  traffic: number;
 }
 

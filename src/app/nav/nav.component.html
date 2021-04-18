@@ -1,0 +1,21 @@
+<div class="nav">
+    <mat-toolbar class="mat-elevation-z5" style="z-index: 10;">
+        <mat-toolbar-row>
+            <button mat-button [routerLink]="" routerLinkActive #rla="routerLinkActive" [ngClass]="{'active': rla.isActive}" style="border-right: 1px;border-top-right-radius: 20px;border-bottom-right-radius: 20px;background-color: rgba(21, 255, 0, 0.26);font-style: italic;">
+                Emaps <mat-icon color="primary" style="margin-right: -5px;margin-top: -3px;">near_me</mat-icon>
+            </button>
+            <button mat-button [routerLink]="" routerLinkActive #rla="routerLinkActive" [ngClass]="{'active': rla.isActive}">
+                Home
+            </button>
+            <span style="flex: 1 1 auto;"></span>
+            <!-- <div style="float: right;"> -->
+            <button mat-button [routerLink]="" routerLinkActive #rla="routerLinkActive" class="{{rla.isActive?'active':''}}" (click)="closeEvnt()" *ngIf="evnt">
+                End-Event
+            </button>
+            <!-- </div> -->
+
+            <!-- <mat-menu #overflowMenu="matMenu" [overlapTrigger]="false">
+            </mat-menu> -->
+        </mat-toolbar-row>
+    </mat-toolbar>
+</div>

@@ -1,0 +1,9 @@
+<mat-dialog-content class="mat-typography text-left" *ngIf="info">
+    <div>{{info.label}}</div>
+    <div>Location: {{info.loc | json}}</div>
+    <div>Address :{{info.address}}</div>
+    <div>From : {{info.from}}</div>
+    <div>Distance: {{info.distance/1000}} Km</div>
+    <div>Traffic: {{info.traffic | timezn}} </div>
+</mat-dialog-content>
+<button mat-button mat-dialog-close class="float-right">Close</button>

@@ -1,0 +1,95 @@
+<mat-card class="example-card pb-0 ">
+    <mat-card-header fxLayout="column" fxLayoutAlign="start center">
+        <mat-card-title class="title">Please fill to continue</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+
+        <mat-vertical-stepper [linear]="true" #stepper>
+            <mat-step [stepControl]="form">
+                <form [formGroup]="form">
+                    <!-- Email -->
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Email" formControlName="email" autocomplete="off" required>
+                        <!-- error -->
+                        <mat-error *ngIf="!form.value.email">
+                            You must provide a <b>Email</b>
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- Location -->
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="lat" formControlName="lat" autocomplete="off" type="text" required>
+                        <mat-icon matSuffix style="cursor: pointer;" (click)="addLocation()">map</mat-icon>
+                        <!-- error -->
+                        <mat-error *ngIf="!form.value.lat">
+                            You must provide a <b>Location</b>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="lng" formControlName="lng" autocomplete="off" type="text" required>
+                        <mat-icon matSuffix style="cursor: pointer;" (click)="addLocation()">map</mat-icon>
+                        <!-- error -->
+                        <mat-error *ngIf="!form.value.lng">
+                            You must provide a <b>Location</b>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-card-actions class="example-full-width callout callout-info" *ngIf="formSubmitAttempt && errorMessage != ''">
+                        <mat-label>
+                            <p>Signup failed!</p>
+                            <p><i class="m-0 p-0">{{errorMessage}}</i></p>
+                        </mat-label>
+                    </mat-card-actions>
+                    <div>
+                        <button mat-button matStepperPrevious>Back</button>
+                        <button mat-button matStepperNext>Next</button>
+                    </div>
+                    <!-- <mat-card-actions>
+                        <div mat-dialog-actions class="float-right">
+                            <button mat-raised-button color="primary" class="mr-2" type="submit" *ngIf="!isLogin">Submit</button>
+                            <mat-progress-spinner [diameter]="20" class="example-margin mr-1" color="primary" mode="indeterminate" *ngIf="isLogin">
+                            </mat-progress-spinner> -->
+                    <!-- <button mat-flat-button mat-dialog-close color="warn">Close</button> -->
+                    <!-- </div>
+                    </mat-card-actions> -->
+                </form>
+            </mat-step>
+            <mat-step [stepControl]="formAddr">
+                <form [formGroup]="formAddr">
+                    <ng-template matStepLabel>Fill out your address</ng-template>
+                    <mat-form-field>
+                        <mat-label>house_no</mat-label>
+                        <input matInput formControlName="house_no" placeholder="Ex. 1A" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>street_address</mat-label>
+                        <input matInput formControlName="street_address" placeholder="Ex. Sella Rd" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>City</mat-label>
+                        <input matInput formControlName="city" placeholder="Ex. Katharagama" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>State</mat-label>
+                        <input matInput formControlName="state" placeholder="Ex. Uva" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Zipcode</mat-label>
+                        <input matInput formControlName="zipcode" placeholder="Ex. 96400" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Country</mat-label>
+                        <input matInput formControlName="country" placeholder="Ex. Sri Lanka" required>
+                    </mat-form-field>
+                    <div>
+                        <button mat-button matStepperPrevious>Back</button>
+                        <button mat-button (click)="stepper.reset()">Reset</button>
+                        <!-- <button mat-button (click)="onSubmit(2)">Submit</button> -->
+                        <button mat-raised-button color="primary" class="mr-2" type="submit" *ngIf="!isLogin" (click)="onSubmit(2)">Submit</button>
+                        <mat-progress-spinner [diameter]="20" class="example-margin mr-1" color="primary" mode="indeterminate" *ngIf="isLogin">
+                        </mat-progress-spinner>
+                    </div>
+                </form>
+            </mat-step>
+        </mat-vertical-stepper>
+
+    </mat-card-content>
+</mat-card>

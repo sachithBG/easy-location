@@ -1,0 +1,35 @@
+<mat-card class="example-card pb-0 ">
+    <mat-card-header fxLayout="column" fxLayoutAlign="start center">
+        <mat-card-title class="title">Please enter your email to continue</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <!-- Email -->
+            <p>
+                <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Email" formControlName="email" autocomplete="off" required>
+                    <!-- error -->
+                    <mat-error *ngIf="!form.value.email">
+                        You must provide a <b>Email</b>
+                    </mat-error>
+                </mat-form-field>
+            </p>
+            <mat-card-actions class="example-full-width callout callout-info text-left" *ngIf="formSubmitAttempt && errorMessage != ''">
+                <mat-label>
+                    <p class="p-0 m-0">Access denied!</p>
+                    <p class="p-0 m-0"><i class="m-0 p-0">{{errorMessage}}</i></p>
+                </mat-label>
+            </mat-card-actions>
+
+            <mat-card-actions>
+                <div mat-dialog-actions class="float-right">
+                    <button mat-raised-button color="primary" class="mr-2" type="submit" *ngIf="!isLogin">Login</button>
+                    <mat-progress-spinner [diameter]="20" class="example-margin mr-1" color="primary" mode="indeterminate" *ngIf="isLogin">
+                    </mat-progress-spinner>
+                    <!-- <button mat-flat-button mat-dialog-close color="warn">Close</button> -->
+                </div>
+            </mat-card-actions>
+        </form>
+        <br>
+    </mat-card-content>
+</mat-card>

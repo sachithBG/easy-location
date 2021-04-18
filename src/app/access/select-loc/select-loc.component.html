@@ -1,0 +1,53 @@
+<!--  -->
+<!-- <div id="map"></div> -->
+<mat-dialog-content class="mat-typography text-center">
+    <div class="row justify-content-center">
+        <div class="pac-card text-left" id="pac-card" style="font-size: medium;">
+            <div style="font-size: 12px;">
+                <div id="title">Search Location</div>
+                <div id="type-selector" class="pac-controls" style="display: none;">
+                    <input type="radio" name="type" id="changetype-all" checked="checked" />
+                    <label for="changetype-all">All</label>
+
+                    <input type="radio" name="type" id="changetype-establishment" />
+                    <label for="changetype-establishment">Establishments</label>
+
+                    <input type="radio" name="type" id="changetype-address" />
+                    <label for="changetype-address">Addresses</label>
+
+                    <input type="radio" name="type" id="changetype-geocode" />
+                    <label for="changetype-geocode">Geocodes</label>
+                </div>
+                <br />
+                <div id="strict-bounds-selector" class="pac-controls" style="display: none;">
+                    <input type="checkbox" id="use-location-bias" value="" checked />
+                    <label for="use-location-bias">Bias to map viewport</label>
+
+                    <input type="checkbox" id="use-strict-bounds" value="" />
+                    <label for="use-strict-bounds">Strict bounds</label>
+                </div>
+            </div>
+            <div id="pac-container">
+                <input id="pac-input" type="text" placeholder="Enter a location" />
+            </div>
+        </div>
+    </div>
+    <agm-map [latitude]="loc.lat" [longitude]="loc.lng" [zoom]="zoom" (mapReady)="mapReadyHandler($event)">
+        <agm-marker (markerClick)="clickedMarker('', 0)" [latitude]="loc.lat" [longitude]="loc.lng" [label]="'I'" [markerDraggable]="true" (dragEnd)="markerDragEnd($event)">
+            <agm-info-window>
+                <strong>lat : {{loc.lat}} <br> lat : {{loc.lng}}</strong>
+            </agm-info-window>
+        </agm-marker>
+    </agm-map>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <mat-progress-spinner [diameter]="30" class="example-margin mr-2" color="primary" mode="indeterminate" *ngIf="isLoader">
+    </mat-progress-spinner>
+    <button mat-raised-button (click)="add()">Add </button>
+    <button mat-raised-button mat-dialog-close matTooltip="Colse">Close </button>
+</mat-dialog-actions>
+<!--  -->
+<div id="infowindow-content">
+    <span id="place-name" class="title"></span><br />
+    <span id="place-address"></span>
+</div>

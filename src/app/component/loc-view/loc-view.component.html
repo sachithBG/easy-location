@@ -1,6 +1,9 @@
-<div class="wow fadeInUp mt-3" data-wow-iteration="1" data-wow-duration="2s">
-    <div class="mt-2 p-0 tbl-content mat-elevation-z1" style="font-family: 'Courier New', Courier, monospace;">
-        <p class="float-left m-4" style="font-size: large;">Location Data</p>
+<div class="tbl-1" data-wow-iteration="1" data-wow-duration="2s">
+    <div class="mt-2 p-0 tbl-content " style="font-family: 'Courier New', Courier, monospace;">
+        <mat-hint>
+            <p class="float-left m-4" style="font-size: large;">Location Data</p>
+        </mat-hint><br>
+        <mat-hint>(Start from your home location)</mat-hint>
         <mat-form-field class="example-form-field">
             <mat-label>Filter</mat-label>
             <input matInput type="text" [(ngModel)]="value" (keyup)="applyFilter($event)" placeholder="Subject" #input>
@@ -11,35 +14,32 @@
         <div class="tbl">
             <table mat-table [dataSource]="dataSource" matSort #TableSort="matSort">
                 <!-- No Column -->
-                <ng-container matColumnDef="loc_no">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Loc No. </th>
-                    <td mat-cell *matCellDef="let row"> {{row.loc_no}} </td>
+                <ng-container matColumnDef="label">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Loc Label. </th>
+                    <td mat-cell *matCellDef="let row"> {{row.label}} </td>
                     <!-- <td mat-footer-cell *matFooterCellDef colspan="3"> Total Locations</td> -->
                 </ng-container>
 
                 <!-- loc Column -->
                 <ng-container matColumnDef="loc">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
-                    <td mat-cell *matCellDef="let row">
-                        <div style="cursor: pointer; display: inline-flex" matTooltip="More info" (click)="more(row)" *ngIf="row.loc">
+                    <th mat-header-cell *matHeaderCellDef> Location </th>
+                    <td mat-cell *matCellDef="let row" (click)="more(row)">
+                        <div style="cursor: pointer; display: inline-flex" *ngIf="row.loc">
                             {{row.loc.lat}} ,<br> {{row.loc.lng}}
                         </div>
-                        <span class="material-icons ml-1">
-                            more
-                        </span>
                     </td>
                 </ng-container>
 
                 <!--Distance Id Column -->
                 <ng-container matColumnDef="distance">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Distance </th>
-                    <td mat-cell *matCellDef="let row"> {{row.distance}} </td>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Distance (Km)</th>
+                    <td mat-cell *matCellDef="let row"> {{row.distance/1000}} </td>
                 </ng-container>
 
                 <!-- Traffic Column -->
                 <ng-container matColumnDef="traffic">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Traffic </th>
-                    <td mat-cell *matCellDef="let row"> {{row.traffic}} </td>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Traffic (h:m:s)</th>
+                    <td mat-cell *matCellDef="let row"> {{row.traffic | timezn}} </td>
                     <!-- <td mat-footer-cell *matFooterCellDef> {{getTotalCost()}} </td> -->
                 </ng-container>
 
@@ -59,10 +59,10 @@
                 </ng-container> -->
                 <!-- Action Column -->
                 <ng-container matColumnDef="action">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+                    <th mat-header-cell *matHeaderCellDef> Action </th>
                     <td mat-cell *matCellDef="let row">
                         <mat-button-toggle-group style="border: none;display: inline-flex;flex-direction: column;">
-                            <button mat-raised-button (click)="delet(row)" matTooltip="Delete" class="mb-1 mt-1 btn-3">
+                            <button mat-icon-button (click)="delet(row)" class="mb-1 mt-1 btn-3">
                                 <mat-icon color="warn">cancel</mat-icon>
                             </button>
                         </mat-button-toggle-group>

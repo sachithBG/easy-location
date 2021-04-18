@@ -3,8 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: true,
-  baseUrl: 'http://localhost:3000'
+  production: false,
+  baseUrl: 'http://emaps-env.eba-wdc74hd9.us-east-2.elasticbeanstalk.com'
 };
 
 /*
