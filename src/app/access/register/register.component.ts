@@ -105,12 +105,16 @@ export class RegisterComponent implements OnInit {
     let usr: User = { email: this.form.value.email, origin: { lat: this.form.value.lat, lng: this.form.value.lng }, address: this.formAddr.value }
     this.userService.addLocByaddr(usr).subscribe((res: any) => {
       console.log(res);
-      setTimeout(() => {
-        this.isLogin = false; this.errorMessage = '';
-        //location.reload()
-      }, 2000);
+      if (res) {
+        setTimeout(() => {
+          this.isLogin = false; this.errorMessage = '';
+          location.reload()
+        }, 2000);
+      } else {
+        this.isLogin = false; this.errorMessage = '_';
+      }
     }, (error) => {
-      setTimeout(() => { this.isLogin = false; this.errorMessage = '' }, 2000);
+      setTimeout(() => { this.isLogin = false; this.errorMessage = ' ' }, 2000);
       // this.shrdService.isLogin_locs_.next({isLogin: false});
     });
 

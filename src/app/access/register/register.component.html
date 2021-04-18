@@ -32,12 +32,6 @@
                             You must provide a <b>Location</b>
                         </mat-error>
                     </mat-form-field>
-                    <mat-card-actions class="example-full-width callout callout-info" *ngIf="formSubmitAttempt && errorMessage != ''">
-                        <mat-label>
-                            <p>Signup failed!</p>
-                            <p><i class="m-0 p-0">{{errorMessage}}</i></p>
-                        </mat-label>
-                    </mat-card-actions>
                     <div>
                         <button mat-button matStepperPrevious>Back</button>
                         <button mat-button matStepperNext>Next</button>
@@ -88,6 +82,12 @@
                         </mat-progress-spinner>
                     </div>
                 </form>
+                <mat-card-actions class="example-full-width callout callout-info p-0 m-0" *ngIf="formSubmitAttempt && errorMessage != ''">
+                    <mat-label>
+                        <p class="m-0 p-0">Signup failed!</p>
+                        <!-- <p class="m-0 p-0"><i class="m-0 p-0">{{errorMessage}}</i></p> -->
+                    </mat-label>
+                </mat-card-actions>
             </mat-step>
         </mat-vertical-stepper>
 
