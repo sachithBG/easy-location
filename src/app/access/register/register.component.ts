@@ -17,7 +17,7 @@ export class RegisterComponent implements OnInit {
   private loginInfo = { email: '', location: '' };
   isLogin = false;
   errorMessage = '';
-  crnt_loc: any = '';
+  crnt_loc: any = { lat: 0, lng: 0 };
   form: FormGroup = new FormGroup({
     email: new FormControl(),
     lat: new FormControl(),
@@ -73,7 +73,7 @@ export class RegisterComponent implements OnInit {
   addLocation() {
     const dialogRefloc = this.dialog.open(SelectLocComponent, {
       minWidth: '300px',
-      width: '600px',
+      maxWidth: '600px',
       disableClose: true,
       data: this.crnt_loc
     });
@@ -113,27 +113,7 @@ export class RegisterComponent implements OnInit {
       setTimeout(() => { this.isLogin = false; this.errorMessage = '' }, 2000);
       // this.shrdService.isLogin_locs_.next({isLogin: false});
     });
-    // this.loginInfo = new AuthLoginInfo(this.form.value.userName, this.form.value.password);
 
-    // this.authService.attemptAuth(this.loginInfo).subscribe(
-    //   (data: any) => {
-    //     console.log(data)
-    //     // this.tokenStorage.saveToken(data.accessToken);
-    //     // this.tokenStorage.saveFName(data.name.split(' ')[1] ? data.name.split(' ')[1] : '');
-    //     // this.tokenStorage.saveLName(data.name.split(' ')[0]);
-    //     // this.tokenStorage.saveUsername(data.username);
-    //     // this.tokenStorage.saveAuthorities(data.authorities);
-    //     // this.tokenStorage.saveUserid(data.userId);
-    //     // this.tokenStorage.saveProfImg(data.profImg);
-    //     this.errorMessage = '';
-    //     setTimeout(() => { }, 2000)
-    //   },
-    //   (error: any) => {
-    //     typeof error.error.message != 'undefined' ? error = error.error.message : error = error.message;
-    //     console.log(error);
-    //     setTimeout(() => { this.isLogin = false; this.errorMessage = error + '' }, 2000)
-    //   }
-    // );
   }
 
 }

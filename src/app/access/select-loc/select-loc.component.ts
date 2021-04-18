@@ -22,10 +22,16 @@ export class SelectLocComponent implements OnInit {
   public mapReadyHandler(map: google.maps.Map): void {
     this.isLoader = true;
     this.map = map;
-    if(!this.loc){
+    if(!this.loc.lat){
       navigator.geolocation.getCurrentPosition((p) => {
-        this.loc = { lat: p.coords.latitude, lng: p.coords.longitude }
-      });
+        this.loc = { lat: p.coords.latitude, lng: p.coords.longitude };
+      },
+        (failure) => {
+          $.getJSON('https://ipinfo.io/geo', (response) => {
+            var loc = response.loc.split(',');
+            this.loc = { lat: loc[0], lng: loc[1] };
+          });
+        });
     }
     this.mapClickListener = this.map.addListener('click', (e: google.maps.MouseEvent) => {
       this.loc.lat = e.latLng.lat();
