@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+declare var $:any
 
 @Component({
   selector: 'app-select-loc',
@@ -27,7 +28,7 @@ export class SelectLocComponent implements OnInit {
         this.loc = { lat: p.coords.latitude, lng: p.coords.longitude };
       },
         (failure) => {
-          $.getJSON('https://ipinfo.io/geo', (response) => {
+          $.getJSON('https://ipinfo.io/geo', (response: any) => {
             var loc = response.loc.split(',');
             this.loc = { lat: loc[0], lng: loc[1] };
           });

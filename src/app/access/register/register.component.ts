@@ -5,8 +5,7 @@ import { User } from 'src/app/model/user';
 import { UserService } from 'src/app/service/user/user.service';
 import { UsrImplService } from 'src/app/serviceImpl/usr-impl.service';
 import { SelectLocComponent } from '../select-loc/select-loc.component';
-import * as $ from 'jquery';
-
+declare var $:any
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -63,7 +62,7 @@ export class RegisterComponent implements OnInit {
       this.crnt_loc = { lat: p.coords.latitude, lng: p.coords.longitude };
     },
       (failure) => {
-        $.getJSON('https://ipinfo.io/geo', (response) => {
+        $.getJSON('https://ipinfo.io/geo', (response: any) => {
           var loc = response.loc.split(',');
           this.crnt_loc = { lat: loc[0], lng: loc[1] };
         });
