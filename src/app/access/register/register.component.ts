@@ -5,6 +5,7 @@ import { User } from 'src/app/model/user';
 import { UserService } from 'src/app/service/user/user.service';
 import { UsrImplService } from 'src/app/serviceImpl/usr-impl.service';
 import { SelectLocComponent } from '../select-loc/select-loc.component';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-register',
@@ -40,7 +41,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      email: ['a@gmail.com', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       lat: ['', Validators.required],
       lng: ['', Validators.required]
     });
@@ -54,37 +55,44 @@ export class RegisterComponent implements OnInit {
       country: ['', Validators.required],
     });
 
-    navigator.geolocation.getCurrentPosition((p) => {
-      this.crnt_loc = { lat: p.coords.latitude, lng: p.coords.longitude }
-    });
+    // navigator.geolocation.getCurrentPosition((p) => {
+    //   this.crnt_loc = { lat: p.coords.latitude, lng: p.coords.longitude }
+    // });
 
+    navigator.geolocation.getCurrentPosition((p) => {
+      this.crnt_loc = { lat: p.coords.latitude, lng: p.coords.longitude };
+    },
+      (failure) => {
+        $.getJSON('https://ipinfo.io/geo', (response) => {
+          var loc = response.loc.split(',');
+          this.crnt_loc = { lat: loc[0], lng: loc[1] };
+        });
+      });
   }
 
   addLocation() {
-    console.log('ok');
-    
-      const dialogRefloc = this.dialog.open(SelectLocComponent, {
-        minWidth: '300px',
-        width: '600px',
-        disableClose: true,
-        data: this.crnt_loc
-      });
-      dialogRefloc.afterClosed().subscribe(result => {
-        console.log(result);
-        if (result) {
-          this.form.patchValue({ lat: result.lat });
-          this.form.patchValue({ lng: result.lng });
-          let d = result.addr.split(',');
-          // console.log(d[2].split(' '));
-          if (d.length == 4) {
-            this.formAddr.patchValue({ house_no: d[0].split(' ')[0] });
-            this.formAddr.patchValue({ street_address: d[0].replace(d[0].split(' ')[0], '') });
-            this.formAddr.patchValue({ city: d[1] });
-            this.formAddr.patchValue({ state: d[2].split(' ')[1] });
-            this.formAddr.patchValue({ zipcode: d[2].split(' ').slice(2)[0] });
-            this.formAddr.patchValue({ country: d[3] });
-          }
+    const dialogRefloc = this.dialog.open(SelectLocComponent, {
+      minWidth: '300px',
+      width: '600px',
+      disableClose: true,
+      data: this.crnt_loc
+    });
+    dialogRefloc.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result) {
+        this.form.patchValue({ lat: result.lat });
+        this.form.patchValue({ lng: result.lng });
+        let d = result.addr.split(',');
+        // console.log(d[2].split(' '));
+        if (d.length == 4) {
+          this.formAddr.patchValue({ house_no: d[0].split(' ')[0] });
+          this.formAddr.patchValue({ street_address: d[0].replace(d[0].split(' ')[0], '') });
+          this.formAddr.patchValue({ city: d[1] });
+          this.formAddr.patchValue({ state: d[2].split(' ')[1] });
+          this.formAddr.patchValue({ zipcode: d[2].split(' ').slice(2)[0] });
+          this.formAddr.patchValue({ country: d[3] });
         }
+      }
     });
   }
 
@@ -97,9 +105,10 @@ export class RegisterComponent implements OnInit {
     let usr: User = { email: this.form.value.email, origin: { lat: this.form.value.lat, lng: this.form.value.lng }, address: this.formAddr.value }
     this.userService.addLocByaddr(usr).subscribe((res: any) => {
       console.log(res);
-      setTimeout(() => { this.isLogin = false; this.errorMessage = '';
-       //location.reload()
-        }, 2000);
+      setTimeout(() => {
+        this.isLogin = false; this.errorMessage = '';
+        //location.reload()
+      }, 2000);
     }, (error) => {
       setTimeout(() => { this.isLogin = false; this.errorMessage = '' }, 2000);
       // this.shrdService.isLogin_locs_.next({isLogin: false});

@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit, AfterContentInit, OnDestroy {
 
   ngOnInit() {
     this.form = this.fb.group({
-      email: ['a@gmail.com', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]],
     });
   }
 
