@@ -5,7 +5,7 @@ import { User } from 'src/app/model/user';
 import { UserService } from 'src/app/service/user/user.service';
 import { UsrImplService } from 'src/app/serviceImpl/usr-impl.service';
 import { SelectLocComponent } from '../select-loc/select-loc.component';
-declare var $:any
+import * as $ from 'jquery';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
